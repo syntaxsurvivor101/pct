@@ -118,7 +118,7 @@ class PactController extends Controller
 
     public function update(UpdatePactRequest $request, Pact $pact): JsonResponse
     {
-        // dd($request->validated());
+
         if ($pact->status !== 'draft'){
             return response()->json([
                 'message' => 'Only draft Pacts can be updated.',
