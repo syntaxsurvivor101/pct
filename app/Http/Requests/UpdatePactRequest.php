@@ -35,7 +35,8 @@ class UpdatePactRequest extends FormRequest
             'contribution_frequency' => ['sometimes', 'required', Rule::in(['every_5_days', 'weekly', 'biweekly', 'monthly']),],
             'collection_method' => ['sometimes', 'required', Rule::in(['direct_to_recipient', 'via_organiser']),],
             'visibility' => ['sometimes', 'required', Rule::in(['private', 'public'])],
-            'join_method' => ['sometimes', 'required', Rule::in(['manual','automatic']),],
+            'join_method' => ['sometimes', 'required', Rule::in(['manual','approval_required']),],
+            'activation_method' => ['sometimes', 'required', Rule::in(['manual', 'automatic'])],
             'min_members' => ['sometimes', 'required', 'integer', 'min:3', 'max:30'],
             'max_members' => ['sometimes', 'required', 'integer', 'min:3', 'max:30'],
             'planned_slots' => ['sometimes', 'required', 'integer', 'min:3', 'max:30'],
@@ -44,7 +45,6 @@ class UpdatePactRequest extends FormRequest
             
         ];
     }
-
 
     public function after(): array
     {
@@ -55,10 +55,10 @@ class UpdatePactRequest extends FormRequest
                 $max = (int) $this->input('max_members', $pact->max_members);
 
                 if ($min > $max) {
-                    $validator->errors()->add{
+                    $validator->errors()->add(
                         'min_members',
                         'Minimum members cannot exceed maximum members.'
-                    };
+                    );
                 }
                 $maxSlots = (int) $this->input('max_slots_per_member', $pact->max_slots_per_member);
                 $plannedSlots = (int) $this->input('planned_slots', $pact->planned_slots);
@@ -66,9 +66,9 @@ class UpdatePactRequest extends FormRequest
                 if($maxSlots > $plannedSlots) {
                     $validator->errors()->add('max_slots_per_member', 'Maximum slots per member cannot exceed planned slots');
                 }
-            }
+            },
 
 
-        ]
+        ];
     }
 }
