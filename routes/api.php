@@ -13,5 +13,5 @@ Route::middleware('auth:sanctum')->group(function (){
 
     Route::get('/pacts', [PactController::class, 'index']);
     Route::get('/pacts/{pact}', [PactController::class, 'show']);
-
+    Route::patch('/pacts/{pact}', [PactController::class, 'update']);
 });

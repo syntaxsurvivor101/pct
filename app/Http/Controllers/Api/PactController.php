@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePactRequest;
+use App\Http\Requests\UpdatePactRequest;
 use App\Models\Pact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
@@ -11,8 +12,6 @@ use Illuminate\Http\Request;
 
 class PactController extends Controller
 {
-
-
     public function index(Request $request): JsonResponse
     {
         $userId = $request->user()->id;
@@ -116,4 +115,23 @@ class PactController extends Controller
             'data' => $pact->load(['rules']),
         ], 201);
     }
+
+    public function update(UpdatePactRequest $request, Pact $pact): JsonResponse
+    {
+        dd($request->validated());
+        if ($pact->status !== 'draft'){
+            return response()->json([
+                'message' => 'Only draft Pacts can be updated.',
+            ], 409);
+        }
+
+        $pact->update($request->validated());
+
+        return response()->json([
+            'message' => 'Pact updated successfully.',
+            'data' => $pact->fresh(['rules']),
+
+        ]);
+    }
+
 }
