@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\PactController;
+use App\Http\Controllers\Api\PactMemberController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -14,4 +15,7 @@ Route::middleware('auth:sanctum')->group(function (){
     Route::get('/pacts', [PactController::class, 'index']);
     Route::get('/pacts/{pact}', [PactController::class, 'show']);
     Route::patch('/pacts/{pact}', [PactController::class, 'update']);
+    Route::patch('/pacts/{pact}/rules', [PactController::class, 'updateRules']);
+    Route::post('/pacts/{pact}/members', [PactMemberController::class, 'store']);
+    Route::post('/pacts/{pact}/accept', [PactMemberController::class, 'accept']);
 });

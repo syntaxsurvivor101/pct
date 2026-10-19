@@ -9,6 +9,7 @@ use App\Models\Pact;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use App\Http\Requests\UpdatePactRulesRequest;
 
 class PactController extends Controller
 {
@@ -131,6 +132,29 @@ class PactController extends Controller
             'message' => 'Pact updated successfully.',
             'data' => $pact->fresh(['rules']),
 
+        ]);
+    }
+
+    public function updateRules(UpdatePactRulesRequest $request, Pact $pact): JsonResponse {
+        if ($pact->status !== 'draft') {
+            return response()->json([
+                'message' => 'Only draft Pact rules can be updated.',
+            ], 409);
+        }
+
+        $rules = $pact->rules;
+
+        if (! $rules) {
+            return response()->json([
+                'message' => 'Pact rules not found.',
+            ], 404);
+        }
+
+        $rules->update($request->validated());
+
+        return response()->json([
+            'message' => 'Pact rules updated successfully.',
+            'data' => $rules->fresh(),
         ]);
     }
 
