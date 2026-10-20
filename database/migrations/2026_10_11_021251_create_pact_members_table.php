@@ -28,7 +28,7 @@ return new class extends Migration
             $table->timestamp('schedule_accepted_at')->nullable();
             $table->timestamp('joined_at')->nullable();
             $table->timestamp('left_at')->nullable();
-            
+           
 
             $table->unique(['pact_id', 'id']);
             $table->index(['pact_id', 'status']);
